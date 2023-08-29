@@ -1,0 +1,56 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* label {display: block;} */
+#app, #sketch {
+    margin: 20px auto;
+    width: 500px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px 40px;
+}
+#draw {
+    border: 1px solid black;
+    margin-top: 10px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+ul li {
+    display: inline-block;
+    width: 100px;
+}
+ul li a {
+    color: orange;
+}
+.sketch-border {
+    border: 1px solid black;
+    width: 120px;
+    height: 120px;
+    background-size: 100% 100%;
+    background-position: center center; 
+}
+.drawing-title {
+    width: 100%;
+    height: 20%;
+    background-color: black;
+    opacity: 0.5;
+    color: #ddd;
+    position: relative;
+    top: 40px;
+    text-align: center;
+}
+.close-btn {
+    width: 20px;
+    height: 20px;
+    background-color: chocolate;
+    text-align: center;
+    position: relative;
+    left: 102px;
+    top: -40px;
+}
+.close-btn > a {
+    text-decoration: none;
+    color: #ddd;
+}

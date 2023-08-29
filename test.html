@@ -1,0 +1,37 @@
+
+<style>
+input{padding:8px;}
+</style>
+<script src="//unpkg.com/vue@next"></script>
+<div id="myApp">
+  <base-input 
+    label="Search: "
+    placeholder="Search"
+    @keyup="search">
+  </base-input><br/>
+</div>
+<script>
+  const { createApp } = Vue;
+  
+  const BaseInput = {
+    props: ['label', 'value'],
+    template: `
+      <label>
+        {{ label }}
+        <input v-bind="$attrs">
+      </label>`
+  };
+  
+  const App = {
+    components: { BaseInput },
+    setup() {
+      const search = event => {
+        console.clear();
+        console.log("Searching...", event.target.value);
+      };
+      return { search };
+    }
+  };
+  
+  createApp(App).mount("#myApp");
+  </script>

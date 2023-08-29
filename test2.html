@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vue.js 3 Table Example</title>
+</head>
+<body>
+
+<div id="app">
+  <table>
+    <tbody>
+      <tr v-for="(row, rowIndex) in tableDataRows" :key="rowIndex">
+        <td v-for="(item, columnIndex) in row" :key="columnIndex">{{ item }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button @click="add">Add</button> <button @click="pop">Pop</button>
+</div>
+
+<script src="vue/vue.global.js"></script>
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      columns: 4,
+    };
+  },
+  methods: {
+    add() {
+        this.data.push(this.data.length + 1);
+        console.log(data);
+    },
+    pop() {
+        this.data.pop();
+    }
+  },
+  computed: {
+    tableDataRows() {
+      const rows = [];
+      const numColumns = this.columns;
+      const numRows = Math.ceil(this.data.length / numColumns);
+
+      for (let i = 0; i < numRows; i++) {
+        const startIndex = i * numColumns;
+        const endIndex = startIndex + numColumns;
+        const row = this.data.slice(startIndex, endIndex);
+        rows.push(row);
+      }
+
+      return rows;
+    },
+  },
+});
+
+app.mount('#app');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="jquery/jquery.min.js"></script> -->
+    <script src="vue/vue.global.js"></script>
+    <script src="vue/vue-router.global.js"></script>
+    <title>Registration</title>
+</head>
+<body>
+    <div id="app">
+        <nav>
+            <ul>
+                <li v-for="menu in menus"><a :href="menu.url">{{menu.name }}</a></li>
+            </ul>
+
+            <!-- <router-view></router-view> -->
+        </nav>
+        <h3>List</h3>
+        <h4>{{sketches}} Sketch(es)</h4>
+        <table border="0">
+            <tbody>
+                <tr v-for="row in tableRows">
+                    <td  v-for="(item, i) in row"  v-bind:style="{ backgroundImage: 'url(' + item.dataURL + ')' }" class="sketch-border" @dblclick="edit(drawings.length - i - 1)"><div class="close-btn"><a href="#" @click="close(drawings.length - i - 1)">X</a></div><div class="drawing-title">{{ (item.public ? '+ ' : '- ') +  item.imageTitle }}</div></td>
+                </tr>
+            </tbody>
+        </table>
+        <table border="0">
+            <tr>
+            <!-- <script>
+                var drawings = JSON.parse(localStorage.getItem('drawings'));
+                var no = 1;
+                for(var i = drawings.length; i > 0; i--) {
+                    document.write('<td class="sketch-border" style="background-image: url(' + drawings[i - 1].dataURL +')"><div class="close-btn"><a href="#" @click="close(' + (i - 1) +')">X</a></div>' + no + '<div class="drawing-title">Title</div></td>');
+                    if(no % 4 == 0)
+                        document.write("</tr><tr>");
+                    no++;
+                }
+            </script> -->
+        </table>
+    </div>
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>

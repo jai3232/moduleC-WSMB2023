@@ -1,0 +1,1 @@
+export const Login = {template: '<h3>Login</h3>'};

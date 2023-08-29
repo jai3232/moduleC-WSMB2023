@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="jquery/jquery.min.js"></script> -->
+    <script src="vue/vue.global.js"></script>
+    <script src="vue/vue-router.global.js"></script>
+    <title>Registration</title>
+</head>
+<body>
+    <div id="app">
+        <nav>
+            <ul>
+                <li v-for="menu in menus"><a :href="menu.url">{{menu.name }}</a></li>
+            </ul>
+
+            <!-- <router-view></router-view> -->
+        </nav>
+        <h3>Sketch</h3>
+        <div>
+            <input type="text" name="title" id="title" v-model="imageTitle"> <input type="checkbox" value="1" @click="public" v-model="public"><label for="public">public</label> <span>&nbsp;</span>
+            <a href="#" @click="save(editNumber)">{{ update ? 'Update' : 'Save'}}</a><span>&nbsp;</span>
+            <a href="#" @click="clear">Clear</a><span>&nbsp;</span>
+            <input type="file" id="imageLoader" name="imageLoader" @change="upload">
+            <a href="#" @click="upload">Image</a><br><br>
+            <input type="color"  class="js-color-picker  color-picker" @change="changeColor" v-model="color">
+            <input type="range" class="js-line-range" min="1" max="30" v-model="width" @change="range">
+            <label class="js-range-value">{{width}}</label>Px
+            <canvas id="draw" width="500" height="300" @mousedown="startDrawing" @mousemove="drawLine" @mouseup="stopDrawing" @mouseOut="stopDrawing"></canvas>
+        </div>
+    </div>
+    
+    <script type="module" src="./js/main.js"></script>
+    
+</body>
+</html>

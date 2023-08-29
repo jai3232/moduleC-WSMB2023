@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="jquery/jquery.min.js"></script> -->
+    <script src="vue/vue.global.js"></script>
+    <script src="vue/vue-router.global.js"></script>
+    <title>Registration</title>
+</head>
+<body>
+    <div id="app">
+        <nav>
+            <ul>
+                <li v-for="menu in menus"><a :href="menu.url" @click="check">{{menu.name }}</a></li>
+            </ul>
+
+            <!-- <router-view></router-view> -->
+        </nav>
+        <h3>Register User</h3>
+        <h4>{{message}}</h4>
+        <label for="username">Username</label>
+        <input type="text" v-model="username" name="username" id="username" class="required">
+        <label for="password"Password>Password</label>
+        <input type="password" v-model="password" name="password" id="password" class="required">
+        <label for="password">Confirm Password</label>
+        <input type="password" v-model="password_repeat" name="password-repeat" id="password-repeat" class="required">
+        <label for="">&nbsp;</label>
+        <button id="register-btn" @click="submit_registration">Submit</button> <input type="reset" value="Reset">
+    </div>
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>

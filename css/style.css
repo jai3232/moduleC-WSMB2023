@@ -1,7 +1,11 @@
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-/* label {display: block;} */
+label {
+    /* display: block; */
+    display: inline-block;
+    margin: 5px;
+}
 #app, #sketch {
     margin: 20px auto;
     width: 500px;

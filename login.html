@@ -13,7 +13,7 @@
     <div id="app">
         <nav>
             <ul>
-                <li v-for="menu in menus"><a :href="menu.url" @click="check">{{menu.name }}</a></li>
+                <li v-for="(menu, i) in menus" v-show="menu.show"><a :href="menu.url" @click="check(i)">{{menu.name }}</a></li>
             </ul>
 
             <!-- <router-view></router-view> -->
@@ -21,11 +21,9 @@
         <h3>Login</h3>
         <h4>{{message}}</h4>
         <label for="username">Username</label>
-        <input type="text" v-model="username" name="username" id="username" class="required">
-        <br>&nbsp;<br>
+        <input type="text" v-model="username" name="username" id="username" class="required"><br>
         <label for="password"Password>Password</label>
-        <input type="password" v-model="password" name="password" id="password" class="required">
-        <br>&nbsp;<br>
+        <input type="password" v-model="password" name="password" id="password" class="required"><br>
         <button id="register-btn" @click="login">Submit</button> <input type="reset" value="Reset">
     </div>
     <script type="module" src="./js/main.js"></script>

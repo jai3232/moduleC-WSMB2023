@@ -3,11 +3,11 @@ const app = Vue.createApp({
     data() {
         return {
             menus: [
-                {'name': 'index', 'url':'/'},
-                {'name': 'sketch', 'url':'/sketch.html'},
-                {'name': 'list', 'url':'/list.html'},
-                {'name': 'register', 'url':'/register.html'},
-                {'name': 'login', 'url':'/login.html'},
+                {'name': 'index', 'url':'/', 'show': true},
+                {'name': 'sketch', 'url':'/sketch.html', 'show': true},
+                {'name': 'list', 'url':'/list.html', 'show': false},
+                {'name': 'register', 'url':'/register.html', 'show': true},
+                {'name': 'login', 'url':'/login.html', 'show': true},
             ],
             message: '',
             username: '',
@@ -21,26 +21,37 @@ const app = Vue.createApp({
             y: 0,
             isDrawing: false,
             sketches: 0,
+            sketchesIndex: 0,
             public: false, // private/public
             imageTitle: 'Free',
             drawings: [],
+            indexDrawings: [],
             update: false,
             editNumber: null,
         }
     },
     mounted() {
         var users = JSON.parse(localStorage.getItem('user'));
+        console.log("L:"+ this.isLogin());
         this.drawings = JSON.parse(localStorage.getItem('drawings'));
+        this.indexDrawings = this.drawings.filter(function(e){
+            return e.public == true;
+        });
         if(this.drawings.length > 0)
             this.sketches = this.drawings.length;
+            this.sketchesIndex = this.indexDrawings.length;
         // localStorage.removeItem("drawings");
         console.log(users);
-        console.log(this.drawings);
+        console.log(this.menus[2]);
+        // console.log(this.drawings);
+        // console.log(this.indexDrawings);
         var username = '';
         users.forEach((item) => {
             if(item.login == true) {
                 username = item.username;
-                this.menus[1].name = 'logout';
+                this.menus[4].name = 'logout (' + username + ')';
+                this.menus[4].url = '/index.html';
+                this.menus[2].show = true;
                 return false;
             }
         });
@@ -85,7 +96,22 @@ const app = Vue.createApp({
               rows.push(row);
             }
             return rows;
-          },
+        },
+        tableRowsIndex() {
+            const rows = [];
+            const numColumns = 4;
+            const reverseDrawings = this.indexDrawings.slice().reverse();
+            const numRows = Math.ceil(this.indexDrawings.length / numColumns);
+            
+            for (var i = 0; i < numRows; i++) {
+              const startIndex = i * numColumns;
+              const endIndex = startIndex + numColumns;
+              const row = reverseDrawings.slice(startIndex, endIndex);
+              rows.push(row);
+            }
+            return rows;
+        },
+
     },
     methods: {
         submit_registration() {
@@ -149,6 +175,7 @@ const app = Vue.createApp({
                     users[i].login = true;
                     this.menus[4].name = 'logout (' + username + ')';
                     this.menus[4].url = '/index.html';
+                    this.menus[2].show = true;
                     this.message = '';
                     localStorage.setItem('user', JSON.stringify(users));
                     return false;
@@ -158,11 +185,24 @@ const app = Vue.createApp({
             if(login == false) {
                 this.message = "Login / Password is not correct";
             }
+            window.location.replace("list.html");
         },
-        check() {
+        isLogin() {
+            var users = JSON.parse(localStorage.getItem('user'));
+            var result = false;
+            users.forEach((item) => {
+                if(item.login) {
+                    result = true;
+                    return false;
+                }
+            });
+            return result;
+        },
+        check(m) {
             var menus = this.menus;
             menus.forEach((item, i) => {
-                if(item.name.includes('logout')) {
+                if(item.name.includes('logout') && m == 4) {
+                    // alert('out')
                     menus[i].name = 'login';
                     menus[i].url = '/index.html';
                     var users = JSON.parse(localStorage.getItem('user'));

@@ -13,12 +13,20 @@
     <div id="app">
         <nav>
             <ul>
-                <li v-for="menu in menus"><a :href="menu.url">{{menu.name }}</a></li>
+                <li v-for="(menu, i) in menus" v-show="menu.show"><a :href="menu.url" @click="check(i)">{{menu.name }}</a></li>
             </ul>
 
             <!-- <router-view></router-view> -->
         </nav>
-        <h3>Index</h3>
+        <h3>Index | Gallery</h3>
+        <h4>{{sketchesIndex}} Sketch(es)</h4>
+        <table border="0">
+            <tbody>
+                <tr v-for="row in tableRowsIndex">
+                    <td  v-for="(item, i) in row"  v-bind:style="{ backgroundImage: 'url(' + item.dataURL + ')' }" class="sketch-border" @dblclick="edit(drawings.length - i - 1)"><div class="drawing-title">{{ item.imageTitle }}</div></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <script type="module" src="./js/main.js"></script>
 </body>

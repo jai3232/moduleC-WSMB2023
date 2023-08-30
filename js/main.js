@@ -4,7 +4,7 @@ const app = Vue.createApp({
         return {
             menus: [
                 {'name': 'index', 'url':'/', 'show': true},
-                {'name': 'sketch', 'url':'/sketch.html', 'show': true},
+                {'name': 'sketch', 'url':'/sketch.html', 'show': false},
                 {'name': 'list', 'url':'/list.html', 'show': false},
                 {'name': 'register', 'url':'/register.html', 'show': true},
                 {'name': 'login', 'url':'/login.html', 'show': true},
@@ -13,6 +13,7 @@ const app = Vue.createApp({
             username: '',
             password: null,
             password_repeat: null,
+            loginUser: null,
             width: 1,
             color: '#000000',
             canvas: null,
@@ -25,38 +26,49 @@ const app = Vue.createApp({
             public: false, // private/public
             imageTitle: 'Free',
             drawings: [],
-            indexDrawings: [],
+            publicDrawings: [], // public drawings to be displayed at index page
             update: false,
             editNumber: null,
+            searchText: null,
+            showModal: false,
+            modalTitle: null,
+            modalDate: null,
+            modalImage: null,
+            modalUser: null,
         }
     },
     mounted() {
         var users = JSON.parse(localStorage.getItem('user'));
-        console.log("L:"+ this.isLogin());
         this.drawings = JSON.parse(localStorage.getItem('drawings'));
-        this.indexDrawings = this.drawings.filter(function(e){
+        this.publicDrawings = this.drawings.filter(function(e){
             return e.public == true;
         });
         if(this.drawings.length > 0)
             this.sketches = this.drawings.length;
-            this.sketchesIndex = this.indexDrawings.length;
+            this.sketchesIndex = this.publicDrawings.length;
         // localStorage.removeItem("drawings");
         console.log(users);
-        console.log(this.menus[2]);
-        // console.log(this.drawings);
-        // console.log(this.indexDrawings);
-        var username = '';
+        console.log(this.drawings);
+        // console.log(this.publicDrawings);
+        // var username = '';
         users.forEach((item) => {
             if(item.login == true) {
-                username = item.username;
-                this.menus[4].name = 'logout (' + username + ')';
+                this.loginUser = item.username;
+                this.menus[4].name = 'logout (' + this.loginUser + ')';
                 this.menus[4].url = '/index.html';
+                this.menus[1].show = true;
                 this.menus[2].show = true;
                 return false;
             }
         });
+        // var count = 0;
+        // for(var i = 0; i < this.drawings.length; i++) {
+        //     if(!this.drawings[i].hasOwnProperty('createdBy')) {
+        //         this.drawings[i]['createdBy'] = 'jailani';
+        //     }
+        // };
 
-        //drawing
+        //canvas drawing init
         this.canvas = document.querySelector('#draw');
         if(this.canvas !== null) {
             this.context = this.canvas.getContext('2d');
@@ -65,6 +77,7 @@ const app = Vue.createApp({
             this.context.lineWidth  = this.width;
         }
 
+        //Redirect for editing
         const href = window.location.href;
         const url = new URL(href);
         const c = url.searchParams.get("edit");
@@ -79,11 +92,36 @@ const app = Vue.createApp({
             var drawings = JSON.parse(localStorage.getItem('drawings'));
             img.src = drawings[c].dataURL;
         }
-        console.log(c);
+
+        // Keyevent keyboard shortcut
+        window.addEventListener('keydown', e => {
+            console.log(e.key);
+            if(e.key == 0) {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+            if(e.key == 1) {
+                this.context.strokeStyle = '#000000';
+            }
+            if(e.key == 2) {
+                this.context.strokeStyle = '#FFFFFF';
+            }
+            if(e.key == '+') {
+                console.log("plus")
+                this.width++;
+                this.context.lineWidth = this.width;
+            }
+            if(e.key == '-') {
+                console.log("minus")
+                if(this.width > 1) {
+                    this.width--;
+                    this.context.lineWidth = this.width;
+                }
+            }
+        })
         
     },
     computed: {
-        tableRows() {
+        tableRows() { // for list page
             const rows = [];
             const numColumns = 4;
             const reverseDrawings = this.drawings.slice().reverse();
@@ -97,11 +135,11 @@ const app = Vue.createApp({
             }
             return rows;
         },
-        tableRowsIndex() {
+        tableRowsIndex() { // for index page
             const rows = [];
             const numColumns = 4;
-            const reverseDrawings = this.indexDrawings.slice().reverse();
-            const numRows = Math.ceil(this.indexDrawings.length / numColumns);
+            const reverseDrawings = this.publicDrawings.slice().reverse();
+            const numRows = Math.ceil(this.publicDrawings.length / numColumns);
             
             for (var i = 0; i < numRows; i++) {
               const startIndex = i * numColumns;
@@ -110,7 +148,7 @@ const app = Vue.createApp({
               rows.push(row);
             }
             return rows;
-        },
+        }
 
     },
     methods: {
@@ -173,8 +211,10 @@ const app = Vue.createApp({
                 if(item.username == username && window.atob(item.password) == password) {
                     login = true;
                     users[i].login = true;
+                    this.loginUser = username;
                     this.menus[4].name = 'logout (' + username + ')';
                     this.menus[4].url = '/index.html';
+                    this.menus[1].show = true;
                     this.menus[2].show = true;
                     this.message = '';
                     localStorage.setItem('user', JSON.stringify(users));
@@ -254,14 +294,14 @@ const app = Vue.createApp({
             else {
                 if(this.drawings.length > 0) {
                     var dataURL = this.canvas.toDataURL('image/png'); 
-                    var drawing_info = {'imageTitle': this.imageTitle, 'dataURL': dataURL, 'date': Date.now(), 'public': this.public};
+                    var drawing_info = {'imageTitle': this.imageTitle, 'dataURL': dataURL, 'date': Date.now(), 'public': this.public, 'createdBy': this.loginUser};
                     // drawings = JSON.parse(drawings);
                     this.drawings.push(drawing_info);
                     localStorage.setItem('drawings', JSON.stringify(this.drawings));
                 }
                 else {
                     var dataURL = this.canvas.toDataURL('image/png');
-                    var drawing_info = {'imageTitle': this.imageTitle, 'dataURL': dataURL, 'date': Date.now(), 'public': this.public};
+                    var drawing_info = {'imageTitle': this.imageTitle, 'dataURL': dataURL, 'date': Date.now(), 'public': this.public, 'createdBy': this.loginUser};
                     this.drawings.push(drawing_info);
                     localStorage.setItem('drawings', JSON.stringify(this.drawings));
                 }
@@ -295,6 +335,36 @@ const app = Vue.createApp({
         edit(i) {
             alert(i);
             window.location.replace("sketch.html?edit=" + i);
+        },
+        search() {
+            var text = this.searchText;
+            this.publicDrawings = this.drawings.filter(function(e){
+                return e.public == true && e.imageTitle.toLowerCase().includes(text.toLowerCase()) ;
+            });
+            this.sketchesIndex = this.publicDrawings.length;
+        },
+        view(i) {
+            this.showModal = !this.showModal;
+            this.modalTitle = this.drawings[i].imageTitle;
+            this.modalUser = this.drawings[i].createdBy;
+            this.modalDate = this.drawings[i].date;
+            this.modalImage = this.drawings[i].dataURL;
+        },
+        getIndex(text) {
+            return this.drawings.findIndex(x => x.date === text);
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+        download(image) {
+            const link = document.createElement('a')
+            document.body.appendChild(link)
+
+            link.href = image;
+            link.target = '_self';
+            link.fileName = 'download.png';
+            link.download = true;
+            link.click();
         }
     }
 });

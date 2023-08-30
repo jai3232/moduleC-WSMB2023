@@ -28,7 +28,7 @@
             <input type="color"  class="js-color-picker  color-picker" @change="changeColor" v-model="color">
             <input type="range" class="js-line-range" min="1" max="30" v-model="width" @change="range">
             <label class="js-range-value">{{width}}</label>Px
-            <canvas id="draw" width="500" height="300" @mousedown="startDrawing" @mousemove="drawLine" @mouseup="stopDrawing" @mouseOut="stopDrawing"></canvas>
+            <canvas id="draw" width="500" height="500" @mousedown="startDrawing" @mousemove="drawLine" @mouseup="stopDrawing" @mouseOut="stopDrawing"></canvas>
         </div>
     </div>
     

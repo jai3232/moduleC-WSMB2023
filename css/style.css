@@ -58,3 +58,40 @@ ul li a {
     text-decoration: none;
     color: #ddd;
 }
+#modal {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+    border-radius: 5px;
+    position: relative;
+    /* top: -260px; */
+    margin-top: -260px;
+    background-color: white;
+}
+#close-modal {
+    position: relative;
+    right: -480px;
+}
+#close-modal > a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: red;
+}
+#modal-content {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+#modal-image {
+    width: 100%;
+    height: 300px;
+    /* margin: auto; */
+    margin-left: -31px;
+    border: 1px solid black;
+    background-size: 100% 100%;
+}
+#download-btn {
+    margin: 10px auto;
+    display: block;
+}
